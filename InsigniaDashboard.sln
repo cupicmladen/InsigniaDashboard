@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2020
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsigniaDashboard.Android", "InsigniaDashboard\InsigniaDashboard.Android\InsigniaDashboard.Android.csproj", "{3272E629-9EBB-43AE-A8F6-5E3C06CD9AC7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsigniaDashboard", "InsigniaDashboard\InsigniaDashboard\InsigniaDashboard.csproj", "{37575D07-1F83-457D-BDFD-3E8365155BF5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3272E629-9EBB-43AE-A8F6-5E3C06CD9AC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3272E629-9EBB-43AE-A8F6-5E3C06CD9AC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3272E629-9EBB-43AE-A8F6-5E3C06CD9AC7}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{3272E629-9EBB-43AE-A8F6-5E3C06CD9AC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3272E629-9EBB-43AE-A8F6-5E3C06CD9AC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3272E629-9EBB-43AE-A8F6-5E3C06CD9AC7}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{37575D07-1F83-457D-BDFD-3E8365155BF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37575D07-1F83-457D-BDFD-3E8365155BF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37575D07-1F83-457D-BDFD-3E8365155BF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37575D07-1F83-457D-BDFD-3E8365155BF5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {582F5773-E856-4A11-B145-C83DC067076B}
+	EndGlobalSection
+EndGlobal
