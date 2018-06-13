@@ -2,12 +2,14 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:InsigniaDashboard"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             x:Class="InsigniaDashboard.MainPage"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d"
-             xmlns:viewmodel="clr-namespace:InsigniaDashboard.ViewModel;assembly=InsigniaDashboard"
-             d:DataContext="{d:DesignInstance Type={x:Type viewmodel:InfoObdViewModel},IsDesignTimeCreatable=True }">
+             x:Class="InsigniaDashboard.MainPage">
+    <!--
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    mc:Ignorable="d"
+    xmlns:viewmodel="clr-namespace:InsigniaDashboard.ViewModel;assembly=InsigniaDashboard"
+    d:DataContext="{d:DesignInstance Type={x:Type viewmodel:InfoObdViewModel},IsDesignTimeCreatable=True }"-->
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -38,7 +40,7 @@
         <Switch IsToggled="{Binding SendFuel}" Grid.Row="3" Grid.Column="2"/>
 
         <Label Text="Gear" Grid.Row="4"/>
-        <Label Text="{Binding GearRequest.Value}" Grid.Row="4" Grid.Column="1"/>
+        <Label Text="{Binding GearCalculatedValue.Value}" Grid.Row="4" Grid.Column="1"/>
         <Switch IsToggled="{Binding SendGear}" Grid.Row="4" Grid.Column="2"/>
 
     </Grid>

@@ -32,7 +32,7 @@ namespace InsigniaDashboard.ViewModel
 			CalculatedEngineLoadRequest = new CalculatedEngineLoadRequest();
 			FuelTankLevelRequest = new FuelTankLevelRequest();
 			MafAirFlowRateRequest = new MafAirFlowRateRequest();
-			GearRequest = new CalculatedViewModel();
+			GearCalculatedValue = new CalculatedValue();
 		}
 	    
 	    public bool SendRpm { get; set; }
@@ -69,7 +69,7 @@ namespace InsigniaDashboard.ViewModel
 
 	    public MafAirFlowRateRequest MafAirFlowRateRequest { get; set; }
 
-	    public CalculatedViewModel GearRequest { get; set; }
+	    public CalculatedValue GearCalculatedValue { get; set; }
 
 	    private void ConnectToObdCommandExecute()
 	    {
@@ -205,31 +205,31 @@ namespace InsigniaDashboard.ViewModel
 
             if (result > 0 && result <= 0.01m)
             {
-                GearRequest.Value = "1";
+                GearCalculatedValue.Value = "1";
             }
             else if (result >= 0.01m && result <= 0.02m)
             {
-                GearRequest.Value = "2";
+                GearCalculatedValue.Value = "2";
             }
             else if (result >= 0.02m && result <= 0.03m)
             {
-                GearRequest.Value = "3";
+                GearCalculatedValue.Value = "3";
             }
             else if (result >= 0.03m && result <= 0.04m)
             {
-                GearRequest.Value = "4";
+                GearCalculatedValue.Value = "4";
             }
             else if (result >= 0.04m && result <= 0.05m)
             {
-                GearRequest.Value = "5";
+                GearCalculatedValue.Value = "5";
             }
             else if (result >= 0.05m && result <= 0.06m)
             {
-                GearRequest.Value = "6";
+                GearCalculatedValue.Value = "6";
             }
             else
             {
-                GearRequest.Value = "0";
+                GearCalculatedValue.Value = "0";
             }
         }
 

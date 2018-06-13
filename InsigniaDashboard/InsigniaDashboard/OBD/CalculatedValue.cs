@@ -3,11 +3,11 @@ using System.Runtime.CompilerServices;
 
 namespace InsigniaDashboard.OBD
 {
-	public class CalculatedViewModel : INotifyPropertyChanged
+	public class CalculatedValue : INotifyPropertyChanged
 	{
 	    private string _value;
 
-        public CalculatedViewModel()
+        public CalculatedValue()
 		{
 			Value = "0";
 		}
