@@ -2,7 +2,12 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:InsigniaDashboard"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              x:Class="InsigniaDashboard.MainPage"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             xmlns:viewmodel="clr-namespace:InsigniaDashboard.ViewModel;assembly=InsigniaDashboard"
+             d:DataContext="{d:DesignInstance Type={x:Type viewmodel:InfoObdViewModel},IsDesignTimeCreatable=True }"
              >
 
     <!--xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -26,7 +31,7 @@
         </Grid.ColumnDefinitions>
 
         <Button Text="Connect" Command="{Binding ConnectToObdCommand}" HorizontalOptions="Center" Margin="10"/>
-        <Label Text="{Binding IsConnected}" Grid.Column="1"/>
+        <Label Text="{Binding IsObdConnected}" Grid.Column="1"/>
 
         <Label Text="RPM" Grid.Row="1"/>
         <Label Text="{Binding RpmCommand.Value}" Grid.Row="1" Grid.Column="1"/>

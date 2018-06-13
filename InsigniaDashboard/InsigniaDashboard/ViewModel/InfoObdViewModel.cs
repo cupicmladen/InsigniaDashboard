@@ -16,22 +16,16 @@ namespace InsigniaDashboard.ViewModel
 {
 	public class InfoObdViewModel : INotifyPropertyChanged
 	{
-	    private CancellationTokenSource _cancellationTokenSource;
+	    private bool _isObdConnected;
+
+        private CancellationTokenSource _cancellationTokenSource;
 	    private IBtConnectionManager _btManager;
 
-	    private RpmViewModel _rpmCommand;
-	    private SpeedViewModel _speedCommand;
-	    private CoolantTemperatureViewModel _coolantCoolantTemperatureCommand;
-	    private EngineOilTemperatureViewModel _engineOilTemperatureCommand;
-	    private CalculatedEngineLoadViewModel _calculatedEngineLoadCommand;
-	    private FuelTankLevelViewModel _fuelTankLevelCommand;
-	    private MafAirFlowRateViewModel _mafAirFlowRateCommand;
-	    private CalculatedViewModel _currentConsumptionCommand;
-	    private CalculatedViewModel _gearCommand;
-
-        public InfoObdViewModel()
+	    public InfoObdViewModel()
 		{
-			RpmCommand = new RpmViewModel();
+		    ConnectToObdCommand = new Command(ConnectToObdCommandExecute);
+
+            RpmCommand = new RpmViewModel();
 			SpeedCommand = new SpeedViewModel();
 			CoolantTemperatureCommand = new CoolantTemperatureViewModel();
 			EngineOilTemperatureCommand = new EngineOilTemperatureViewModel();
@@ -40,195 +34,144 @@ namespace InsigniaDashboard.ViewModel
 			MafAirFlowRateCommand = new MafAirFlowRateViewModel();
 			GearCommand = new CalculatedViewModel();
 			CurrentConsumptionCommand = new CalculatedViewModel();
-
-            ConnectToObdCommand = new Command(ConnectToObdCommandExecute);
 		}
+	    
+	    public bool SendRpm { get; set; }
 
-	    private bool _sendRpm;
-	    public bool SendRpm
-	    {
-	        get { return _sendRpm; }
-	        set
-	        {
-	            _sendRpm = value;
-	        }
-	    }
+	    public bool SendSpeed { get; set; }
 
-	    private bool _sendSpeed;
-	    public bool SendSpeed
-	    {
-	        get { return _sendSpeed; }
-	        set
-	        {
-	            _sendSpeed = value;
-	        }
-	    }
+	    public bool SendFuel { get; set; }
 
-	    private bool _sendFuel;
-	    public bool SendFuel
-	    {
-	        get { return _sendFuel;}
-	        set
-	        {
-	            _sendFuel = value;
-	        }
-	    }
-
-	    private bool _sendGear;
-	    public bool SendGear
-	    {
-	        get { return _sendGear; }
-	        set
-	        {
-	            _sendGear = value;
-	        }
-	    }
-
-	    private bool _isConnected;
-        public bool IsConnected
+	    public bool SendGear { get; set; }
+	    
+        public bool IsObdConnected
         {
-            get { return _isConnected; }
+            get => _isObdConnected;
             set
             {
-                _isConnected = value;
+                _isObdConnected = value;
                 OnPropertyChanged();
             }
         }
 
-	    #region ObdCommands
+	    public ICommand ConnectToObdCommand { get; private set; }
 
-	    public RpmViewModel RpmCommand
-	    {
-	        get { return _rpmCommand; }
-	        set { _rpmCommand = value; }
-	    }
+        public RpmViewModel RpmCommand { get; set; }
 
-	    public SpeedViewModel SpeedCommand
-	    {
-	        get { return _speedCommand; }
-	        set { _speedCommand = value; }
-	    }
+	    public SpeedViewModel SpeedCommand { get; set; }
 
-	    public CoolantTemperatureViewModel CoolantTemperatureCommand
-	    {
-	        get { return CoolantCoolantTemperatureCommand; }
-	        set { CoolantCoolantTemperatureCommand = value; }
-	    }
+	    public CoolantTemperatureViewModel CoolantTemperatureCommand { get; set; }
 
-	    public EngineOilTemperatureViewModel EngineOilTemperatureCommand
-	    {
-	        get { return _engineOilTemperatureCommand; }
-	        set { _engineOilTemperatureCommand = value; }
-	    }
+	    public EngineOilTemperatureViewModel EngineOilTemperatureCommand { get; set; }
 
-	    public CalculatedEngineLoadViewModel CalculatedEngineLoadCommand
-	    {
-	        get { return _calculatedEngineLoadCommand; }
-	        set { _calculatedEngineLoadCommand = value; }
-	    }
+	    public CalculatedEngineLoadViewModel CalculatedEngineLoadCommand { get; set; }
 
-	    public FuelTankLevelViewModel FuelTankLevelCommand
-	    {
-	        get { return _fuelTankLevelCommand; }
-	        set { _fuelTankLevelCommand = value; }
-	    }
+	    public FuelTankLevelViewModel FuelTankLevelCommand { get; set; }
 
-	    public MafAirFlowRateViewModel MafAirFlowRateCommand
-	    {
-	        get { return _mafAirFlowRateCommand; }
-	        set { _mafAirFlowRateCommand = value; }
-	    }
+	    public MafAirFlowRateViewModel MafAirFlowRateCommand { get; set; }
 
-	    public CalculatedViewModel GearCommand
-	    {
-	        get { return _gearCommand; }
-	        set { _gearCommand = value; }
-	    }
+	    public CalculatedViewModel GearCommand { get; set; }
 
-	    public CalculatedViewModel CurrentConsumptionCommand
-	    {
-	        get { return _currentConsumptionCommand; }
-	        set { _currentConsumptionCommand = value; }
-	    }
-
-	    #endregion
-
-        public ICommand ConnectToObdCommand { get; private set; }
-        public CoolantTemperatureViewModel CoolantCoolantTemperatureCommand { get => CoolantCoolantTemperatureCommand1; set => CoolantCoolantTemperatureCommand1 = value; }
-        public CoolantTemperatureViewModel CoolantCoolantTemperatureCommand1 { get => _coolantCoolantTemperatureCommand; set => _coolantCoolantTemperatureCommand = value; }
-
-        public bool ConnectToObdAndInitialize()
-		{
-			_btManager = DependencyService.Get<IBtConnectionManager>();
-            _btManager.ConnectToObd();
-
-            if (_btManager == null || !_btManager.IsConnected)
-                return false;
-
-            var initCommands = new List<string> { "ati\r", "atl0\r", "ath0\r", "ats0\r", "atsp6\r", "atcra 7e8\r", "0100\r", "0100\r" };
-
-            var index = 0;
-            Device.StartTimer(TimeSpan.FromMilliseconds(500), () =>
-            {
-                _btManager.SendCommand(initCommands[index]);
-                index++;
-
-                if (index == initCommands.Count)
-                    return false;
-
-                return true;
-            });
-
-            _btManager.DataReceived += BtDataReceived;
-            _btManager.StartReadingData();
-
-            LoadData();
-
-			return _btManager.IsConnected;
-		}
-
-		public void StopReadingData()
-		{
-			_cancellationTokenSource.Cancel();
-		}
-
-        #region PrivateMethods
+	    public CalculatedViewModel CurrentConsumptionCommand { get; set; }
 
 	    private void ConnectToObdCommandExecute()
 	    {
-	        IsConnected = ConnectToObdAndInitialize();
+	        _btManager = DependencyService.Get<IBtConnectionManager>();
+	        _btManager.ConnectToObd();
+
+	        if (_btManager == null || !_btManager.IsConnected)
+	            IsObdConnected = false;
+
+	        var initCommands = new List<string> { "ati\r", "atl0\r", "ath0\r", "ats0\r", "atsp6\r", "atcra 7e8\r", "0100\r", "0100\r" };
+
+	        var index = 0;
+	        Device.StartTimer(TimeSpan.FromMilliseconds(500), () =>
+	        {
+	            _btManager.SendCommand(initCommands[index]);
+	            index++;
+
+	            if (index == initCommands.Count)
+	                return false;
+
+	            return true;
+	        });
+
+	        _btManager.DataReceived += BtDataReceived;
+	        _btManager.StartReadingData();
+
+	        StartSendingRequests();
+
+	        IsObdConnected = _btManager.IsConnected;
+        }
+
+	    private void BtDataReceived(string command)
+	    {
+	        //TODO: check if this need to be on main thread
+	        Device.BeginInvokeOnMainThread(() =>
+	        {
+	            var commandsSplit = command.Split(new[] { '>' }, StringSplitOptions.RemoveEmptyEntries);
+	            for (var i = 0; i < commandsSplit.Length; i++)
+	            {
+	                var response = commandsSplit[i].SplitAndRefactor(2);
+
+	                if (response.Count == 0)
+	                {
+	                    continue;
+	                }
+
+	                var obdCommand = FindCommand(response[0]);
+
+	                if (obdCommand == null)
+	                {
+	                    continue;
+	                }
+
+	                response.RemoveAt(0);
+	                obdCommand.CalculateValue(response);
+
+	                if (SendRpm && SendSpeed && SendGear)
+	                    CalculateGear();
+	            }
+	        });
 	    }
 
-        private void BtDataReceived(string command)
-        {
-            //TODO: check if this need to be on main thread
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                var commandsSplit = command.Split(new[] { '>' }, StringSplitOptions.RemoveEmptyEntries);
-                for (var i = 0; i < commandsSplit.Length; i++)
-                {
-                    var response = commandsSplit[i].SplitAndRefactor(2);
+        private void StartSendingRequests()
+	    {
+	        if (_cancellationTokenSource == null || _cancellationTokenSource.IsCancellationRequested)
+	            _cancellationTokenSource = new CancellationTokenSource();
 
-                    if (response.Count == 0)
-                    {
-                        continue;
-                    }
+	        Task.Factory.StartNew((o) =>
+	        {
+	            var frequency = 0;
 
-                    var obdCommand = FindCommand(response[0]);
+	            while (!_cancellationTokenSource.IsCancellationRequested)
+	            {
+	                if (frequency == 0 && SendRpm)
+	                {
+	                    _btManager.SendCommand(RpmCommand.FormattedCommand);
+	                }
+	                else if (frequency == 1 && SendSpeed)
+	                {
+	                    _btManager.SendCommand(SpeedCommand.FormattedCommand);
+	                }
+	                else if (frequency == 2 && SendFuel)
+	                {
+	                    _btManager.SendCommand(FuelTankLevelCommand.FormattedCommand);
+	                }
 
-                    if (obdCommand == null)
-                    {
-                        continue;
-                    }
+	                if (frequency == 2)
+	                    frequency = -1;
 
-                    response.RemoveAt(0);
-                    obdCommand.CalculateValue(response);
+	                frequency++;
+	                Task.Delay(50).Wait();
+	            }
+	        }, TaskCreationOptions.LongRunning, _cancellationTokenSource.Token);
+	    }
 
-                    if (SendRpm && SendSpeed && SendGear)
-                        CalculateGear();
-                }
-            });
-        }
+        private void StopReadingData()
+		{
+			_cancellationTokenSource.Cancel();
+		}
 
 	    private ObdViewModel FindCommand(string commandShort)
         {
@@ -237,8 +180,6 @@ namespace InsigniaDashboard.ViewModel
 
             if (SpeedCommand.CommandShort == commandShort)
                 return SpeedCommand;
-
-            //fsdfasd
 
             //if (CoolantTemperatureCommand.CommandShort == commandShort)
             //	return CoolantTemperatureCommand;
@@ -256,39 +197,6 @@ namespace InsigniaDashboard.ViewModel
             //	return MafAirFlowRateCommand;
 
             return null;
-        }
-
-        private void LoadData()
-        {
-            if (_cancellationTokenSource == null || _cancellationTokenSource.IsCancellationRequested)
-                _cancellationTokenSource = new CancellationTokenSource();
-
-            Task.Factory.StartNew((o) =>
-            {
-                var frequency = 0;
-
-                while (!_cancellationTokenSource.IsCancellationRequested)
-                {
-                    if (frequency == 0 && SendRpm)
-                    {
-                        _btManager.SendCommand(RpmCommand.FormattedCommand);
-                    }
-                    else if (frequency == 1 && SendSpeed)
-                    {
-                        _btManager.SendCommand(SpeedCommand.FormattedCommand);
-                    }
-                    else if (frequency == 2 && SendFuel)
-                    {
-                        _btManager.SendCommand(FuelTankLevelCommand.FormattedCommand);
-                    }
-
-                    if (frequency == 2)
-                        frequency = -1;
-
-                    frequency++;
-                    Task.Delay(50).Wait();
-                }
-            }, TaskCreationOptions.LongRunning, _cancellationTokenSource.Token);
         }
 
         private void CalculateGear()
@@ -327,8 +235,6 @@ namespace InsigniaDashboard.ViewModel
                 GearCommand.Value = "0";
             }
         }
-
-        #endregion
 
 	    public event PropertyChangedEventHandler PropertyChanged;
 	    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

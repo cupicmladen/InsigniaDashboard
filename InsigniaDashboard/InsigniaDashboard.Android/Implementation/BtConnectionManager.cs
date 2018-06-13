@@ -14,10 +14,12 @@ namespace InsigniaDashboard.Droid.Implementation
 {
 	public class BtConnectionManager : IBtConnectionManager
 	{
-	    private BluetoothSocket _socket;
+        private BluetoothSocket _socket;
 	    private bool _readingData;
 	    private readonly CancellationTokenSource _ts;
 	    private readonly CancellationToken _ct;
+
+	    public event Action<string> DataReceived;
 
         public BtConnectionManager()
 		{
@@ -29,8 +31,26 @@ namespace InsigniaDashboard.Droid.Implementation
 
         public void ConnectToObd()
 		{
-			TryConnect();
-		}
+		    var btAdapter = BluetoothAdapter.DefaultAdapter;
+
+		    if (btAdapter == null || !btAdapter.IsEnabled)
+		        return;
+
+		    var device = btAdapter.BondedDevices.FirstOrDefault(it => it.Name.Contains("OBD"));
+
+		    var createRfcommSocket = JNIEnv.GetMethodID(device.Class.Handle, "createRfcommSocket", "(I)Landroid/bluetooth/BluetoothSocket;");
+		    var socketTmp = JNIEnv.CallObjectMethod(device.Handle, createRfcommSocket, new Android.Runtime.JValue(1));
+		    _socket = Java.Lang.Object.GetObject<BluetoothSocket>(socketTmp, JniHandleOwnership.TransferLocalRef);
+
+		    try
+		    {
+		        _socket.Connect();
+		    }
+		    catch (Exception)
+		    {
+		        // TODO: do something useful here
+		    }
+        }
 
 		public void SendCommand(string command)
 		{
@@ -49,7 +69,7 @@ namespace InsigniaDashboard.Droid.Implementation
 					if (!string.IsNullOrEmpty(value))
 						DataReceived?.Invoke(value);
 				}
-			}, _ct);
+			}, _ct, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 		}
 
 		public void StopReadingData()
@@ -59,47 +79,20 @@ namespace InsigniaDashboard.Droid.Implementation
 			_socket.Close();
 		}
 
-		public event Action<string> DataReceived;
-
 	    private string ReadData()
 	    {
 	        var buffer = new byte[1024];
-	        var count = 0;
 	        var cont = true;
 	        var value = string.Empty;
 	        while (cont)
 	        {
-	            count = _socket.InputStream.Read(buffer, 0, buffer.Length);
+	            var count = _socket.InputStream.Read(buffer, 0, buffer.Length);
 	            value += Encoding.ASCII.GetString(buffer, 0, count);
 	            if (value.EndsWith(">"))
 	                cont = false;
 	        }
 
 	        return value.Replace("\r", string.Empty);
-	    }
-
-        private void TryConnect()
-	    {
-	        var btAdapter = BluetoothAdapter.DefaultAdapter;
-
-	        if (btAdapter == null || !btAdapter.IsEnabled)
-	            return;
-
-	        var device = btAdapter.BondedDevices.FirstOrDefault(it => it.Name.Contains("OBD"));
-
-	        var createRfcommSocket = JNIEnv.GetMethodID(device.Class.Handle, "createRfcommSocket", "(I)Landroid/bluetooth/BluetoothSocket;");
-	        var socketTmp = JNIEnv.CallObjectMethod(device.Handle, createRfcommSocket, new Android.Runtime.JValue(1));
-	        _socket = Java.Lang.Object.GetObject<BluetoothSocket>(socketTmp, JniHandleOwnership.TransferLocalRef);
-
-	        try
-	        {
-	            _socket.Connect();
-	        }
-	        catch (Exception)
-	        {
-	            // TODO: do something useful here
-	        }
-
 	    }
 
 	    // unused method (leave it for now)
