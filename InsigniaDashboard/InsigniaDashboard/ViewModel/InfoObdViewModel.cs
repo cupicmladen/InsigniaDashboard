@@ -238,6 +238,8 @@ namespace InsigniaDashboard.ViewModel
             if (SpeedCommand.CommandShort == commandShort)
                 return SpeedCommand;
 
+            //fsdfasd
+
             //if (CoolantTemperatureCommand.CommandShort == commandShort)
             //	return CoolantTemperatureCommand;
 
