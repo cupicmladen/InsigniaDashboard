@@ -2,10 +2,47 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:InsigniaDashboard"
-             x:Class="InsigniaDashboard.MainPage">
+             x:Class="InsigniaDashboard.MainPage"
+             >
 
-	<Label Text="Welcome to Xamarin.Forms!" 
-           VerticalOptions="Center" 
-           HorizontalOptions="Center" />
+    <!--xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:InsigniaDashboard.ViewModel;assembly=InsigniaDashboard"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance {x:Type vm:InfoObdViewModel}}"-->
 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Button Text="Connect" Command="{Binding ConnectToObdCommand}" HorizontalOptions="Center" Margin="10"/>
+        <Label Text="{Binding IsConnected}" Grid.Column="1"/>
+
+        <Label Text="RPM" Grid.Row="1"/>
+        <Label Text="{Binding RpmCommand.Value}" Grid.Row="1" Grid.Column="1"/>
+        <Switch IsToggled="{Binding SendRpm}" Grid.Row="1" Grid.Column="2"/>
+
+        <Label Text="Speed" Grid.Row="2"/>
+        <Label Text="{Binding SpeedCommand.Value}" Grid.Row="2" Grid.Column="1"/>
+        <Switch IsToggled="{Binding SendSpeed}" Grid.Row="2" Grid.Column="2"/>
+
+        <Label Text="Fuel" Grid.Row="3"/>
+        <Label Text="{Binding FuelTankLevelCommand.Value}" Grid.Row="3" Grid.Column="1"/>
+        <Switch IsToggled="{Binding SendFuel}" Grid.Row="3" Grid.Column="2"/>
+
+        <Label Text="Gear" Grid.Row="4"/>
+        <Label Text="{Binding GearCommand.Value}" Grid.Row="4" Grid.Column="1"/>
+        <Switch IsToggled="{Binding SendGear}" Grid.Row="4" Grid.Column="2"/>
+
+    </Grid>
 </ContentPage>
