@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace InsigniaDashboard.OBD
 {
-	public class SpeedViewModel : ObdViewModel
+	public class SpeedRequest : ObdRequest
 	{
-		public SpeedViewModel()
+		public SpeedRequest()
 		{
 			Command = "010D";
 			CommandShort = "0D";

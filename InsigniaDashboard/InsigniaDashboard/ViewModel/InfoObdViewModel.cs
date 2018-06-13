@@ -14,7 +14,7 @@ using Xamarin.Forms;
 
 namespace InsigniaDashboard.ViewModel
 {
-	public class InfoObdViewModel : INotifyPropertyChanged
+	public sealed class InfoObdViewModel : INotifyPropertyChanged
 	{
 	    private bool _isObdConnected;
 
@@ -25,15 +25,14 @@ namespace InsigniaDashboard.ViewModel
 		{
 		    ConnectToObdCommand = new Command(ConnectToObdCommandExecute);
 
-            RpmCommand = new RpmViewModel();
-			SpeedCommand = new SpeedViewModel();
-			CoolantTemperatureCommand = new CoolantTemperatureViewModel();
-			EngineOilTemperatureCommand = new EngineOilTemperatureViewModel();
-			CalculatedEngineLoadCommand = new CalculatedEngineLoadViewModel();
-			FuelTankLevelCommand = new FuelTankLevelViewModel();
-			MafAirFlowRateCommand = new MafAirFlowRateViewModel();
-			GearCommand = new CalculatedViewModel();
-			CurrentConsumptionCommand = new CalculatedViewModel();
+            RpmRequest = new RpmRequest();
+			SpeedRequest = new SpeedRequest();
+			CoolantTemperatureRequest = new CoolantTemperatureRequest();
+			EngineOilTemperatureRequest = new EngineOilTemperatureRequest();
+			CalculatedEngineLoadRequest = new CalculatedEngineLoadRequest();
+			FuelTankLevelRequest = new FuelTankLevelRequest();
+			MafAirFlowRateRequest = new MafAirFlowRateRequest();
+			GearRequest = new CalculatedViewModel();
 		}
 	    
 	    public bool SendRpm { get; set; }
@@ -56,23 +55,21 @@ namespace InsigniaDashboard.ViewModel
 
 	    public ICommand ConnectToObdCommand { get; private set; }
 
-        public RpmViewModel RpmCommand { get; set; }
+        public RpmRequest RpmRequest { get; set; }
 
-	    public SpeedViewModel SpeedCommand { get; set; }
+	    public SpeedRequest SpeedRequest { get; set; }
 
-	    public CoolantTemperatureViewModel CoolantTemperatureCommand { get; set; }
+	    public CoolantTemperatureRequest CoolantTemperatureRequest { get; set; }
 
-	    public EngineOilTemperatureViewModel EngineOilTemperatureCommand { get; set; }
+	    public EngineOilTemperatureRequest EngineOilTemperatureRequest { get; set; }
 
-	    public CalculatedEngineLoadViewModel CalculatedEngineLoadCommand { get; set; }
+	    public CalculatedEngineLoadRequest CalculatedEngineLoadRequest { get; set; }
 
-	    public FuelTankLevelViewModel FuelTankLevelCommand { get; set; }
+	    public FuelTankLevelRequest FuelTankLevelRequest { get; set; }
 
-	    public MafAirFlowRateViewModel MafAirFlowRateCommand { get; set; }
+	    public MafAirFlowRateRequest MafAirFlowRateRequest { get; set; }
 
-	    public CalculatedViewModel GearCommand { get; set; }
-
-	    public CalculatedViewModel CurrentConsumptionCommand { get; set; }
+	    public CalculatedViewModel GearRequest { get; set; }
 
 	    private void ConnectToObdCommandExecute()
 	    {
@@ -148,15 +145,15 @@ namespace InsigniaDashboard.ViewModel
 	            {
 	                if (frequency == 0 && SendRpm)
 	                {
-	                    _btManager.SendCommand(RpmCommand.FormattedCommand);
+	                    _btManager.SendCommand(RpmRequest.FormattedCommand);
 	                }
 	                else if (frequency == 1 && SendSpeed)
 	                {
-	                    _btManager.SendCommand(SpeedCommand.FormattedCommand);
+	                    _btManager.SendCommand(SpeedRequest.FormattedCommand);
 	                }
 	                else if (frequency == 2 && SendFuel)
 	                {
-	                    _btManager.SendCommand(FuelTankLevelCommand.FormattedCommand);
+	                    _btManager.SendCommand(FuelTankLevelRequest.FormattedCommand);
 	                }
 
 	                if (frequency == 2)
@@ -173,13 +170,13 @@ namespace InsigniaDashboard.ViewModel
 			_cancellationTokenSource.Cancel();
 		}
 
-	    private ObdViewModel FindCommand(string commandShort)
+	    private ObdRequest FindCommand(string commandShort)
         {
-            if (RpmCommand.CommandShort == commandShort)
-                return RpmCommand;
+            if (RpmRequest.CommandShort == commandShort)
+                return RpmRequest;
 
-            if (SpeedCommand.CommandShort == commandShort)
-                return SpeedCommand;
+            if (SpeedRequest.CommandShort == commandShort)
+                return SpeedRequest;
 
             //if (CoolantTemperatureCommand.CommandShort == commandShort)
             //	return CoolantTemperatureCommand;
@@ -190,8 +187,8 @@ namespace InsigniaDashboard.ViewModel
             //if (CalculatedEngineLoadCommand.CommandShort == commandShort)
             //	return CalculatedEngineLoadCommand;
 
-            if (FuelTankLevelCommand.CommandShort == commandShort)
-                return FuelTankLevelCommand;
+            if (FuelTankLevelRequest.CommandShort == commandShort)
+                return FuelTankLevelRequest;
 
             //if (MafAirFlowRateCommand.CommandShort == commandShort)
             //	return MafAirFlowRateCommand;
@@ -201,43 +198,44 @@ namespace InsigniaDashboard.ViewModel
 
         private void CalculateGear()
         {
-            if (RpmCommand.GetRpm == 0)
+            if (RpmRequest.GetRpm == 0)
                 return;
 
-            var result = (decimal)SpeedCommand.Speed / RpmCommand.GetRpm;
+            var result = (decimal)SpeedRequest.Speed / RpmRequest.GetRpm;
 
             if (result > 0 && result <= 0.01m)
             {
-                GearCommand.Value = "1";
+                GearRequest.Value = "1";
             }
             else if (result >= 0.01m && result <= 0.02m)
             {
-                GearCommand.Value = "2";
+                GearRequest.Value = "2";
             }
             else if (result >= 0.02m && result <= 0.03m)
             {
-                GearCommand.Value = "3";
+                GearRequest.Value = "3";
             }
             else if (result >= 0.03m && result <= 0.04m)
             {
-                GearCommand.Value = "4";
+                GearRequest.Value = "4";
             }
             else if (result >= 0.04m && result <= 0.05m)
             {
-                GearCommand.Value = "5";
+                GearRequest.Value = "5";
             }
             else if (result >= 0.05m && result <= 0.06m)
             {
-                GearCommand.Value = "6";
+                GearRequest.Value = "6";
             }
             else
             {
-                GearCommand.Value = "0";
+                GearRequest.Value = "0";
             }
         }
 
 	    public event PropertyChangedEventHandler PropertyChanged;
-	    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+
+	    private void OnPropertyChanged([CallerMemberName] string propertyName = null)
 	    {
 	        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	    }

@@ -7,15 +7,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              xmlns:viewmodel="clr-namespace:InsigniaDashboard.ViewModel;assembly=InsigniaDashboard"
-             d:DataContext="{d:DesignInstance Type={x:Type viewmodel:InfoObdViewModel},IsDesignTimeCreatable=True }"
-             >
-
-    <!--xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:vm="clr-namespace:InsigniaDashboard.ViewModel;assembly=InsigniaDashboard"
-             mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance {x:Type vm:InfoObdViewModel}}"-->
-
+             d:DataContext="{d:DesignInstance Type={x:Type viewmodel:InfoObdViewModel},IsDesignTimeCreatable=True }">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -34,11 +26,11 @@
         <Label Text="{Binding IsObdConnected}" Grid.Column="1"/>
 
         <Label Text="RPM" Grid.Row="1"/>
-        <Label Text="{Binding RpmCommand.Value}" Grid.Row="1" Grid.Column="1"/>
+        <Label Text="{Binding RpmRequest.Value}" Grid.Row="1" Grid.Column="1"/>
         <Switch IsToggled="{Binding SendRpm}" Grid.Row="1" Grid.Column="2"/>
 
         <Label Text="Speed" Grid.Row="2"/>
-        <Label Text="{Binding SpeedCommand.Value}" Grid.Row="2" Grid.Column="1"/>
+        <Label Text="{Binding SpeedRequest.Value}" Grid.Row="2" Grid.Column="1"/>
         <Switch IsToggled="{Binding SendSpeed}" Grid.Row="2" Grid.Column="2"/>
 
         <Label Text="Fuel" Grid.Row="3"/>
@@ -46,7 +38,7 @@
         <Switch IsToggled="{Binding SendFuel}" Grid.Row="3" Grid.Column="2"/>
 
         <Label Text="Gear" Grid.Row="4"/>
-        <Label Text="{Binding GearCommand.Value}" Grid.Row="4" Grid.Column="1"/>
+        <Label Text="{Binding GearRequest.Value}" Grid.Row="4" Grid.Column="1"/>
         <Switch IsToggled="{Binding SendGear}" Grid.Row="4" Grid.Column="2"/>
 
     </Grid>

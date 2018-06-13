@@ -12,10 +12,10 @@ namespace InsigniaDashboard.ViewModel
 {
     public class AveregeSpeedViewModel : INotifyPropertyChanged
     {
-        private SpeedViewModel _speedViewModel;
+        private SpeedRequest _speedViewModel;
         private bool _averegeSpeedMeasuringStarted;
 
-        public AveregeSpeedViewModel(SpeedViewModel speedViewModel)
+        public AveregeSpeedViewModel(SpeedRequest speedViewModel)
         {
             _speedViewModel = speedViewModel;
             MeasureAveregeSpeedCommand = new Command(MeasureAveregeSpeedCommandExecute);

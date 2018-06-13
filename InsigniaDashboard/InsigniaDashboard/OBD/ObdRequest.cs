@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace InsigniaDashboard.OBD
 {
-	public class ObdViewModel : INotifyPropertyChanged
+	public class ObdRequest : INotifyPropertyChanged
 	{
 	    private string _command;
 	    private string _commandShort;

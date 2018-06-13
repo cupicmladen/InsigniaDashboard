@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace InsigniaDashboard.OBD
 {
-	public class CalculatedEngineLoadViewModel : ObdViewModel
+	public class CalculatedEngineLoadRequest : ObdRequest
 	{
-		public CalculatedEngineLoadViewModel()
+		public CalculatedEngineLoadRequest()
 		{
 			Command = "0104";
 			CommandShort = "04";

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace InsigniaDashboard.OBD
 {
-	public class CoolantTemperatureViewModel : ObdViewModel
+	public class CoolantTemperatureRequest : ObdRequest
 	{
-		public CoolantTemperatureViewModel()
+		public CoolantTemperatureRequest()
 		{
 			Command = "0105";
 			CommandShort = "05";

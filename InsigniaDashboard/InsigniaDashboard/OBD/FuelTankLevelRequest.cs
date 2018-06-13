@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace InsigniaDashboard.OBD
 {
-	public class FuelTankLevelViewModel : ObdViewModel
+	public class FuelTankLevelRequest : ObdRequest
 	{
 	    private const int FuelTankCapacity = 70;
 	    private const double AveregeConsumption = 7.2; // TODO: calculate this later;
 	    private double _remainingFuelInLitres;
 	    private int _range;
 
-        public FuelTankLevelViewModel()
+        public FuelTankLevelRequest()
 		{
 			Command = "012F";
 			CommandShort = "2F";
