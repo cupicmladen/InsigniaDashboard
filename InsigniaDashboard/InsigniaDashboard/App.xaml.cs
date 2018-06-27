@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using InsigniaDashboard.Interface;
 using InsigniaDashboard.ViewModel;
 using Xamarin.Forms;
 
@@ -13,7 +14,7 @@ namespace InsigniaDashboard
         {
             InitializeComponent();
 
-            MainPage = new MainPage() { BindingContext = new InfoObdViewModel() };
+            MainPage = new MainPage() { BindingContext = new InfoObdViewModel(DependencyService.Get<IBtConnectionManager>()) };
         }
 
         protected override void OnStart()

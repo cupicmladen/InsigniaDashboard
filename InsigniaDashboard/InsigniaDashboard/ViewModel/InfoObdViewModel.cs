@@ -21,8 +21,10 @@ namespace InsigniaDashboard.ViewModel
         private CancellationTokenSource _cancellationTokenSource;
 	    private IBtConnectionManager _btManager;
 
-	    public InfoObdViewModel()
-		{
+	    public InfoObdViewModel(IBtConnectionManager btManager)
+	    {
+	        _btManager = btManager;
+
 		    ConnectToObdCommand = new Command(ConnectToObdCommandExecute);
 
             RpmRequest = new RpmRequest();
@@ -73,7 +75,6 @@ namespace InsigniaDashboard.ViewModel
 
 	    private void ConnectToObdCommandExecute()
 	    {
-	        _btManager = DependencyService.Get<IBtConnectionManager>();
 	        _btManager.ConnectToObd();
 
 	        if (!_btManager.IsConnected)

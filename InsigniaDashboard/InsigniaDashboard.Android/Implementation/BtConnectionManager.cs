@@ -36,7 +36,7 @@ namespace InsigniaDashboard.Droid.Implementation
 
 		    if (btAdapter == null || !btAdapter.IsEnabled)
 		    {
-		        Application.Current.MainPage.DisplayAlert("BtConnectionManager", "Bluetooth adapter not found", "Cancel");
+		        Application.Current.MainPage.DisplayAlert("BtConnectionManager", "Bluetooth default adapter not found", "Cancel");
 		        return;
 		    }
 
@@ -44,7 +44,7 @@ namespace InsigniaDashboard.Droid.Implementation
 
 		    if (device == null)
 		    {
-		        Application.Current.MainPage.DisplayAlert("BtConnectionManager", "Adapter not found", "Cancel");
+		        Application.Current.MainPage.DisplayAlert("BtConnectionManager", " OBD bonded devices not found", "Cancel");
                 return;
             }
 

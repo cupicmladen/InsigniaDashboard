@@ -36,7 +36,7 @@
         <Switch IsToggled="{Binding SendSpeed}" Grid.Row="2" Grid.Column="2"/>
 
         <Label Text="Fuel" Grid.Row="3"/>
-        <Label Text="{Binding FuelTankLevelCommand.Value}" Grid.Row="3" Grid.Column="1"/>
+        <Label Text="{Binding FuelTankLevelRequest.Value}" Grid.Row="3" Grid.Column="1"/>
         <Switch IsToggled="{Binding SendFuel}" Grid.Row="3" Grid.Column="2"/>
 
         <Label Text="Gear" Grid.Row="4"/>
