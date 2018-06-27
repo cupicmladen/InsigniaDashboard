@@ -8,6 +8,7 @@ using Android.Runtime;
 using InsigniaDashboard.Droid.Implementation;
 using InsigniaDashboard.Interface;
 using Java.Util;
+using Xamarin.Forms;
 
 [assembly: Xamarin.Forms.Dependency(typeof(BtConnectionManager))]
 namespace InsigniaDashboard.Droid.Implementation
@@ -34,22 +35,31 @@ namespace InsigniaDashboard.Droid.Implementation
 		    var btAdapter = BluetoothAdapter.DefaultAdapter;
 
 		    if (btAdapter == null || !btAdapter.IsEnabled)
+		    {
+		        Application.Current.MainPage.DisplayAlert("BtConnectionManager", "Bluetooth adapter not found", "Cancel");
 		        return;
+		    }
 
 		    var device = btAdapter.BondedDevices.FirstOrDefault(it => it.Name.Contains("OBD"));
 
-		    var createRfcommSocket = JNIEnv.GetMethodID(device.Class.Handle, "createRfcommSocket", "(I)Landroid/bluetooth/BluetoothSocket;");
-		    var socketTmp = JNIEnv.CallObjectMethod(device.Handle, createRfcommSocket, new Android.Runtime.JValue(1));
-		    _socket = Java.Lang.Object.GetObject<BluetoothSocket>(socketTmp, JniHandleOwnership.TransferLocalRef);
+		    if (device == null)
+		    {
+		        Application.Current.MainPage.DisplayAlert("BtConnectionManager", "Adapter not found", "Cancel");
+                return;
+            }
 
 		    try
 		    {
-		        _socket.Connect();
+		        var createRfcommSocket = JNIEnv.GetMethodID(device.Class.Handle, "createRfcommSocket", "(I)Landroid/bluetooth/BluetoothSocket;");
+		        var socketTmp = JNIEnv.CallObjectMethod(device.Handle, createRfcommSocket, new Android.Runtime.JValue(1));
+		        _socket = Java.Lang.Object.GetObject<BluetoothSocket>(socketTmp, JniHandleOwnership.TransferLocalRef);
+
+                _socket.Connect();
 		    }
 		    catch (Exception)
 		    {
-		        // TODO: do something useful here
-		    }
+		        Application.Current.MainPage.DisplayAlert("BtConnectionManager", "Catch exception", "Cancel");
+            }
         }
 
 		public void SendCommand(string command)

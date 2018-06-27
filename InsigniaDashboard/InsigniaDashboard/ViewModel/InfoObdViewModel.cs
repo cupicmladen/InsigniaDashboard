@@ -76,8 +76,11 @@ namespace InsigniaDashboard.ViewModel
 	        _btManager = DependencyService.Get<IBtConnectionManager>();
 	        _btManager.ConnectToObd();
 
-	        if (_btManager == null || !_btManager.IsConnected)
+	        if (!_btManager.IsConnected)
+	        {
 	            IsObdConnected = false;
+                return;
+            }
 
 	        var initCommands = new List<string> { "ati\r", "atl0\r", "ath0\r", "ats0\r", "atsp6\r", "atcra 7e8\r", "0100\r", "0100\r" };
 
