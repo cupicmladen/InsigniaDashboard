@@ -24,7 +24,11 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <Button Text="Connect" Command="{Binding ConnectToObdCommand}" HorizontalOptions="Center" Margin="10"/>
+        <StackLayout Margin="10">
+            <Button Text="Connect" Command="{Binding ConnectToObdCommand}" HorizontalOptions="Center"/>
+            <Button Text="Disconnect" Command="{Binding DisconnectFromObdCommand}" HorizontalOptions="Center"/>
+            <Button Text="CheckState" Command="{Binding CheckConnectionStateCommand}" HorizontalOptions="Center"/>
+        </StackLayout>
         <Label Text="{Binding IsObdConnected}" Grid.Column="1"/>
 
         <Label Text="RPM" Grid.Row="1"/>

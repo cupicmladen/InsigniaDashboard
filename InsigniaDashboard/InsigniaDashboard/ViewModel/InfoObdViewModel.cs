@@ -26,6 +26,8 @@ namespace InsigniaDashboard.ViewModel
 	        _btManager = btManager;
 
 		    ConnectToObdCommand = new Command(ConnectToObdCommandExecute);
+		    DisconnectFromObdCommand = new Command(DisconnectFromObdCommandExecute);
+	        CheckConnectionStateCommand = new Command(CheckConnectionStateCommandExecute);
 
             RpmRequest = new RpmRequest();
 			SpeedRequest = new SpeedRequest();
@@ -56,6 +58,10 @@ namespace InsigniaDashboard.ViewModel
         }
 
 	    public ICommand ConnectToObdCommand { get; private set; }
+
+	    public ICommand DisconnectFromObdCommand { get; private set; }
+
+	    public ICommand CheckConnectionStateCommand { get; private set; }
 
         public RpmRequest RpmRequest { get; set; }
 
@@ -105,7 +111,17 @@ namespace InsigniaDashboard.ViewModel
 	        IsObdConnected = _btManager.IsConnected;
         }
 
-	    private void BtDataReceived(string command)
+	    private void DisconnectFromObdCommandExecute()
+	    {
+            _btManager.DisconnectFromObd();
+	    }
+
+	    private void CheckConnectionStateCommandExecute()
+	    {
+	        IsObdConnected = _btManager.IsConnected;
+	    }
+
+        private void BtDataReceived(string command)
 	    {
 	        //TODO: check if this need to be on main thread
 	        Device.BeginInvokeOnMainThread(() =>

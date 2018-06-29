@@ -8,7 +8,7 @@ namespace InsigniaDashboard.Interface
 		bool IsConnected { get; }
 		void SendCommand(string command);
 		void StartReadingData();
-		void StopReadingData();
+		void DisconnectFromObd();
 		event Action<string> DataReceived;
 	}
 }

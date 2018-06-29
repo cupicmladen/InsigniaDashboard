@@ -8,6 +8,7 @@ using Android.Runtime;
 using InsigniaDashboard.Droid.Implementation;
 using InsigniaDashboard.Interface;
 using Java.Util;
+using Org.Apache.Http.Message;
 using Xamarin.Forms;
 
 [assembly: Xamarin.Forms.Dependency(typeof(BtConnectionManager))]
@@ -36,8 +37,11 @@ namespace InsigniaDashboard.Droid.Implementation
 
 		    if (btAdapter == null || !btAdapter.IsEnabled)
 		    {
-		        Application.Current.MainPage.DisplayAlert("BtConnectionManager", "Bluetooth default adapter not found", "Cancel");
-		        return;
+                if(btAdapter == null)
+		            Application.Current.MainPage.DisplayAlert("BtConnectionManager", "Bluetooth default null", "Cancel");
+                else if(!btAdapter.IsEnabled)
+                    Application.Current.MainPage.DisplayAlert("BtConnectionManager", "Bluetooth not enabled", "Cancel");
+                return;
 		    }
 
 		    var device = btAdapter.BondedDevices.FirstOrDefault(it => it.Name.Contains("OBD"));
@@ -53,7 +57,7 @@ namespace InsigniaDashboard.Droid.Implementation
 		        var createRfcommSocket = JNIEnv.GetMethodID(device.Class.Handle, "createRfcommSocket", "(I)Landroid/bluetooth/BluetoothSocket;");
 		        var socketTmp = JNIEnv.CallObjectMethod(device.Handle, createRfcommSocket, new Android.Runtime.JValue(1));
 		        _socket = Java.Lang.Object.GetObject<BluetoothSocket>(socketTmp, JniHandleOwnership.TransferLocalRef);
-
+                
                 _socket.Connect();
 		    }
 		    catch (Exception)
@@ -82,11 +86,12 @@ namespace InsigniaDashboard.Droid.Implementation
 			}, _ct, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 		}
 
-		public void StopReadingData()
+		public void DisconnectFromObd()
 		{
 			_readingData = false;
 			_ts.Cancel();
-			_socket.Close();
+		    _socket.InputStream.Close();
+            _socket.Close();
 		}
 
 	    private string ReadData()
